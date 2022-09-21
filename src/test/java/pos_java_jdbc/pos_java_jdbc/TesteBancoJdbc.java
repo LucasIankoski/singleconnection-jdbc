@@ -8,6 +8,8 @@ import org.junit.Test;
 
 import conexaojdbc.SingleConnection;
 import dao.UserPosDAO;
+import model.BeanUserFone;
+import model.Telefone;
 import model.Userposjava;
 
 public class TesteBancoJdbc {
@@ -50,17 +52,45 @@ public class TesteBancoJdbc {
 		userposdao.atualizarUsuario(userposjava, 1L);
 
 	}
+	
+	@Test
+	public void inserirTelefone() {
+		Telefone telefone = new Telefone();
+		telefone.setNumero("(51) 3288-1930");
+		telefone.setTipo("Residencial");
+		telefone.setUsuario(3L);
+		
+		UserPosDAO userposdao = new UserPosDAO();
+		userposdao.salvarTelefone(telefone);
+	}
 
 	@Test
 	public void initDeletarUsuario() {
 		try {
 			SingleConnection.getConnection();
 			UserPosDAO userposdao = new UserPosDAO();
-			userposdao.deletarUsuario(1L);
+			userposdao.deletarUsuario(5L);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	
+	@Test
+	public void listarContatosUsuario() throws SQLException {
+		SingleConnection.getConnection();
+		
+		UserPosDAO userposdao = new UserPosDAO();
+		List<BeanUserFone> listaDeUsuarios = userposdao.listarContatosUsuario(3L);
+		
+		for(BeanUserFone bUserFone : listaDeUsuarios) {
+			System.out.println("Nome: " + bUserFone.getNome());
+			System.out.println("Numero: " + bUserFone.getNumero());
+			System.out.println("E-mail: " + bUserFone.getEmail());
+			System.out.println("_______________________");
+		}
+	}
+	
+	
 
 }
